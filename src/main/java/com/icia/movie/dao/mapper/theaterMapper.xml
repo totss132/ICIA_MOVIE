@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Theater">
+
+	<insert id="insert" parameterType="theater">
+		INSERT INTO THEATERS VALUES('TH'||LPAD(THEATER_SEQ.NEXTVAL,2,0), #{thName}, #{thAddr})
+	</insert>
+	
+	<select id="list" resultType="theater">
+		SELECT * FROM THEATERS
+	</select>
+	
+	<insert id="schedule" parameterType="schedules">
+		INSERT INTO SCHEDULES
+		VALUES(#{scHall}, TO_DATE(#{inScTime},'YYYY-MM-DD HH24:MI:SS'), #{thCode},#{movCode})
+	</insert>
+	
+	<select id = "thList" resultType = "schedules">
+										
+		 SELECT * FROM THEATERS
+	</select>
+	
+	<select id = "thList2" resultType = "schedules">
+		 SELECT * FROM MOVIES
+	</select>
+
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Movie">
+	
+	<insert id="insert" parameterType="movie">
+		INSERT INTO MOVIES VALUES('MV'||LPAD(MOVIE_SEQ.NEXTVAL,4,0),  #{movName},  #{movDirector}, #{movGenre},  #{movGrade}, #{movOpen}, #{movPoster, jdbcType=VARCHAR}, #{movStory}, 0)
+	</insert>
+	
+	<select id="count" resultType="int">
+		SELECT COUNT(*) FROM MOVIES
+	</select>
+	
+	<select id="list" parameterType="paging" resultType="movie">
+		SELECT MOVCODE, MOVNAME, MOVDIRECTOR, MOVGENRE, MOVGRADE, MOVPOSTER, TRUNC(AVG(CSTARSCORE)*10)*2 AS MOVSTARSCORE FROM MVLIST M , COMMENTS C WHERE M.MOVCODE = C.CMCODE AND RN BETWEEN #{startRow} AND #{endRow} GROUP BY MOVCODE, MOVNAME, MOVDIRECTOR, MOVGENRE, MOVGRADE, MOVPOSTER
+	</select>
+	
+	<select id="list2" parameterType="paging" resultType="movie">
+		SELECT * FROM MVLIST WHERE RN BETWEEN #{startRow} AND #{endRow} AND MOVCODE NOT IN (SELECT CMCODE FROM COMMENTS)
+	</select>
+	
+	<select id="mView" parameterType="String" resultType="movie">
+		SELECT * FROM MOVIES WHERE MOVCODE = #{movCode}
+	</select>
+	
+	<select id="mBook" resultType="movie">
+		SELECT * FROM MOVIES
+	</select>
+	
+	<delete id="mvscDelete" parameterType="String">
+		DELETE FROM SCHEDULES WHERE SCMOVCODE = #{movCode}
+	</delete>
+	
+	<delete id="mvrsDelete" parameterType="String">
+		DELETE FROM RESERVATION WHERE RVMOVCODE = #{movCode}
+	</delete>	
+	<delete id="mvcmDelete" parameterType="String">
+		DELETE FROM COMMENTS WHERE CMCODE = #{movCode}
+	</delete>
+	<delete id="delete" parameterType="String">
+		DELETE FROM MOVIES WHERE MOVCODE = #{movCode}
+	</delete>
+	<update id="modify" parameterType="movie">
+		UPDATE MOVIES SET MOVNAME = #{movName}, MOVDIRECTOR = #{movDirector}, MOVGENRE = #{movGenre}, MOVGRADE = #{movGrade},
+	 	MOVOPEN = #{movOpen}, MOVSTORY = #{movStory}, MOVPOSTER = #{movPoster} WHERE MOVCODE = #{movCode}
+	</update>
+	
+
+</mapper>
